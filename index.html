@@ -36,45 +36,54 @@
   <p class="guesses"></p>
   <p class="lastResult"></p>
   <p class="lowOrHi"></p>
+  <p class="Count"></p>
 </div>
 
 </body>
 
 <script>
-  let randomNumber = Math.random() * 10;
+  let randomNumber = Math.random() * 100+1;//Se corrigio ya que contenia un numero 10
 
-  const ATTEMPS = 5;
+  const ATTEMPS = 10;//Cantidad de intentos modificada se encotraban 5
   const guesses = document.querySelector('.guesses');
   const lastResult = document.querySelector('.lastResult');
-  const lowOrHi = document.querySelector('lowOrHi');
+  const lowOrHi = document.querySelector('.lowOrHi');//Faltaba un punto
   const guessSubmit = document.querySelector('.guessSubmit');
   const guessField = document.querySelector('.guessField');
+  const Count = document.querySelector('.Count');
 
   let guessCount = 1;
   let resetButton;
 
   function checkGuess() {
+    Count.textContent='Intentos: '+ guessCount;
+    let userGuess = parseInt(guessField.value);//Se devia de convertir a entero
+    if (Number.isNaN(userGuess) || userGuess <= 0) {
+      alert('Por favor, ingresa un número entero positivo.');
+      return; // No incrementar el intento si el valor ingresado no es un número entero positivo
+    }
 
-    let userGuess = guessField.value;
     if(guessCount === 1) {
       guesses.textContent = 'Número aleatorio anterior: ';
     }
     guesses.textContent += userGuess + ' ';
 
-    if(userGuess === randomNumber) {
+    if(guessCount == ATTEMPS) {
       lastResult.textContent = '!!!Pérdistes!!!';
-      lastResult.style.backgroundColor = 'black';
+      lastResult.style.backgroundColor = 'red';//se modifico en color ya que tenia negro
       lowOrHi.textContent = '';
       setGameOver();
-    } else if(guessCount === ATTEMPS) {
+    } else if(userGuess == randomNumber) {
       lastResult.textContent = 'Felicitaciones! adivinaste el número!';
-      lastResult.style.backgroundColor = 'red';
+      lastResult.style.backgroundColor = 'green';//se modifico el color ya que tenia rojo
+      lowOrHi.textContent = '';//Se agrego linea para ocultar texto de "el numero es mayor o menor"
       setGameOver();
     } else {
       lastResult.textContent = 'Incorrecto! ';
-      lastResult.style.backgroundColor = 'green';
+      lastResult.style.backgroundColor = 'black';//se modifico el color ya que tenia verde
       if(userGuess < randomNumber) {
         lowOrHi.textContent = 'El número es mayor!';
+        
       } else if(userGuess > randomNumber) {
         lowOrHi.textContent = 'El número es menor!';
       }
@@ -84,7 +93,7 @@
     guessField.value = '';
     guessField.focus();
   }
-  guessSubmit.addeventListener('click', checkGuess);
+  guessSubmit.addEventListener('click', checkGuess);//El evento se encontraba mal escrito debia de contener E y contenia e
 
   function setGameOver() {
 	  guessField.disabled = true;
@@ -92,7 +101,7 @@
 	  resetButton = document.createElement('button');
 	  resetButton.textContent = 'Comienza un nuevo juego';
 	  document.body.appendChild(resetButton);
-	  resetButton.addeventListener('click', resetGame);
+	  resetButton.addEventListener('click', resetGame);//El evento se encontraba mal escrito debia de contener E y contenia e
   }
 
   function resetGame() {
@@ -111,7 +120,7 @@
 
 	  lastResult.style.backgroundColor = 'white';
 
-	  randomNumber = Math.floor(Math.random()) + 1;
+	  randomNumber = Math.floor(Math.random()*100) + 1;//Faltaba Multiplicar Por 100
   }
 </script>
 </html>
